@@ -1,26 +1,6 @@
 (function () {
   "use strict";
 
-  // ─── Guard: Hanya bisa dijalankan via bookmark ───────────────────────────────
-  let instanceIndex = -1;
-  if (typeof window.RAMA_BOOKMARK_LOAD !== "undefined") {
-    instanceIndex = 0;
-  } else {
-    for (let i = 1; i <= 500; i++) {
-      if (typeof window["RAMA" + i + "_BOOKMARK_LOAD"] !== "undefined") {
-        instanceIndex = i;
-        break;
-      }
-    }
-  }
-  if (instanceIndex === -1) {
-    console.log(
-      "%cAccess Denied - Bookmark Required",
-      "color:#ff0000;font-size:15px;font-weight:bold"
-    );
-    return;
-  }
-
   // ─── Konfigurasi URL & Style ─────────────────────────────────────────────────
   const CONFIG = {
     r: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/vanz.txt",
@@ -215,7 +195,7 @@
         musicBtn.textContent = "⏳";
         let resolvedUrl      = FALLBACK_MUSIC_URL;
         try {
-          const res      = await fetch(CONFIG.m + "?t=" + Date.now());
+          const res = await fetch(CONFIG.m + "?t=" + Date.now());
           const audioUrl = (await res.text()).trim();
           if (audioUrl && audioUrl.startsWith("http")) {
             resolvedUrl = audioUrl;
