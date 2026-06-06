@@ -44,7 +44,7 @@
     "RAMAMODS",
   ];
 
-  const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/yuhb8756-lab/RAMA-MODZ-MUSIC/main/music.mp3";
+  const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
   let audioPlayer = null;
 
   // ─── Main IIFE ────────────────────────────────────────────────────────────────
