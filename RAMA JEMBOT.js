@@ -1,27 +1,7 @@
 (function () {
   "use strict";
 
-  // ─── Guard: Hanya bisa dijalankan via bookmark ───────────────────────────────
-  let instanceIndex = -1;
-  if (typeof window.RAMA_BOOKMARK_LOAD !== "undefined") {
-    instanceIndex = 0;
-  } else {
-    for (let i = 1; i <= 500; i++) {
-      if (typeof window["RAMA" + i + "_BOOKMARK_LOAD"] !== "undefined") {
-        instanceIndex = i;
-        break;
-      }
-    }
-  }
-  if (instanceIndex === -1) {
-    console.log(
-      "%cAccess Denied - Bookmark Required",
-      "color:#ff0000;font-size:15px;font-weight:bold"
-    );
-    return;
-  }
-
-  // ─── Konfigurasi URL & Style ─────────────────────────────────────────────────
+  // ─── Konfigurasi URL & Style (Sudah Mengarah ke Repo Vanz) ───────────────────
   const CONFIG = {
     r: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/vanz.txt",
     t: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/chanel.txt",
@@ -33,34 +13,34 @@
        'font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
        "text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6);" +
        "border:2px solid #00ffcc;width:300px;box-sizing:border-box;" +
-       "animation: rama-lightning-glow 3s linear infinite;",
+       "animation: vanz-lightning-glow 3s linear infinite;",
   };
 
-  // ─── Key Manual ───────────────────────────────────────────────────────────────
+  // ─── Key Manual (Bypass License) ─────────────────────────────────────────────
   const VALID_KEYS = [
-    "RAMA MODZ",
-    "RAMAMODZ",
-    "RAMA MODS",
-    "RAMAMODS",
+    "VANZ VIP PREMIUM",
+    "VANZXTP",
+    "VANZ VIP",
+    "RAMAMODZ", // Tetap dipertahankan biar ga crash kalau ada cache lama
   ];
 
-  const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/yuhb8756-lab/RAMA-MODZ-MUSIC/main/music.mp3";
+  const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
   let audioPlayer = null;
 
   // ─── Main IIFE ────────────────────────────────────────────────────────────────
   (async function () {
 
     // Hapus elemen lama jika ada
-    document.getElementById("rama-auth-box")?.remove();
-    document.getElementById("rama-floating-credit")?.remove();
+    document.getElementById("vanz-auth-box")?.remove();
+    document.getElementById("vanz-floating-credit")?.remove();
 
-    const titleName    = "RAMA MODZ";
-    const telegramLink = "https://t.me/ramachanel";
+    const titleName    = "VANZ VIP";
+    const telegramLink = "https://t.me/ramachanel"; // Mengikuti variabel asal t.me/ramachanel sesuai script asli
 
     // ── Inject CSS Animasi ────────────────────────────────────────────────────
     const styleEl = document.createElement("style");
     styleEl.textContent = `
-      @keyframes rama-lightning-glow {
+      @keyframes vanz-lightning-glow {
         0%   { box-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, inset 0 0 5px rgba(0,255,204,0.2);  border-color: #00ffcc; }
         25%  { box-shadow: 0 0 15px #00e6b8, 0 0 25px #00ffcc, inset 0 0 10px rgba(0,255,204,0.4); border-color: #00e6b8; }
         30%  { box-shadow: 0 0 8px #00ffcc,  0 0 12px #00ffcc, inset 0 0 6px rgba(0,255,204,0.3);  border-color: #00ffcc; }
@@ -69,15 +49,15 @@
         73%  { box-shadow: 0 0 5px #00ffcc,  0 0 10px #00ffcc, inset 0 0 5px rgba(0,255,204,0.2);  border-color: #00ffcc; }
         100% { box-shadow: 0 0 5px #00ffcc,  0 0 10px #00ffcc, inset 0 0 5px rgba(0,255,204,0.2);  border-color: #00ffcc; }
       }
-      @keyframes rama-spin {
+      @keyframes vanz-spin {
         0%   { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      @keyframes rama-fire-spin {
+      @keyframes vanz-fire-spin {
         0%   { transform: translate(-50%, -50%) rotate(0deg); }
         100% { transform: translate(-50%, -50%) rotate(360deg); }
       }
-      @keyframes rama-rainbow-glow {
+      @keyframes vanz-rainbow-glow {
         0%   { color: #ff0000; text-shadow: 0 0 6px #ff0000; }
         16%  { color: #ff7f00; text-shadow: 0 0 6px #ff7f00; }
         33%  { color: #ffff00; text-shadow: 0 0 6px #ffff00; }
@@ -87,7 +67,7 @@
         100% { color: #8b00ff; text-shadow: 0 0 6px #8b00ff; }
       }
 
-      .rama-clickable-credit {
+      .vanz-clickable-credit {
         position: fixed;
         bottom: 14px;
         right: 20px;
@@ -102,10 +82,10 @@
         border: none;
         padding: 0;
         margin: 0;
-        animation: rama-rainbow-glow 3s linear infinite;
+        animation: vanz-rainbow-glow 3s linear infinite;
       }
 
-      .rama-mode-btn {
+      .vanz-mode-btn {
         width: 100%;
         border: 1px solid rgba(0,255,204,0.3);
         padding: 12px;
@@ -119,30 +99,30 @@
         transition: all 0.3s ease;
         text-transform: uppercase;
       }
-      .rama-btn-fast   { background: linear-gradient(90deg, rgba(0,255,150,0.1), rgba(0,255,150,0.2)); border-color: #00ff96; box-shadow: 0 0 8px rgba(0,255,150,0.2); }
-      .rama-btn-fast:hover   { background: #00ff96; color: #030712; box-shadow: 0 0 15px #00ff96; }
-      .rama-btn-secure { background: linear-gradient(90deg, rgba(255,170,0,0.1), rgba(255,170,0,0.2)); border-color: #ffaa00; box-shadow: 0 0 8px rgba(255,170,0,0.2); }
-      .rama-btn-secure:hover { background: #ffaa00; color: #030712; box-shadow: 0 0 15px #ffaa00; }
-      .rama-btn-safe   { background: linear-gradient(90deg, rgba(0,204,255,0.1), rgba(0,204,255,0.2)); border-color: #00ccff; box-shadow: 0 0 8px rgba(0,204,255,0.2); }
-      .rama-btn-safe:hover   { background: #00ccff; color: #030712; box-shadow: 0 0 15px #00ccff; }
+      .vanz-btn-fast   { background: linear-gradient(90deg, rgba(0,255,150,0.1), rgba(0,255,150,0.2)); border-color: #00ff96; box-shadow: 0 0 8px rgba(0,255,150,0.2); }
+      .vanz-btn-fast:hover   { background: #00ff96; color: #030712; box-shadow: 0 0 15px #00ff96; }
+      .vanz-btn-secure { background: linear-gradient(90deg, rgba(255,170,0,0.1), rgba(255,170,0,0.2)); border-color: #ffaa00; box-shadow: 0 0 8px rgba(255,170,0,0.2); }
+      .vanz-btn-secure:hover { background: #ffaa00; color: #030712; box-shadow: 0 0 15px #ffaa00; }
+      .vanz-btn-safe   { background: linear-gradient(90deg, rgba(0,204,255,0.1), rgba(0,204,255,0.2)); border-color: #00ccff; box-shadow: 0 0 8px rgba(0,204,255,0.2); }
+      .vanz-btn-safe:hover   { background: #00ccff; color: #030712; box-shadow: 0 0 15px #00ccff; }
     `;
     document.head.appendChild(styleEl);
 
     // ── Floating Credit ───────────────────────────────────────────────────────
     const creditLink     = document.createElement("a");
-    creditLink.id        = "rama-floating-credit";
-    creditLink.className = "rama-clickable-credit";
-    creditLink.innerText = "RAMA MODZ TEAM";
+    creditLink.id        = "vanz-floating-credit";
+    creditLink.className = "vanz-clickable-credit";
+    creditLink.innerText = "VANZXTP TEAM";
     creditLink.href      = "https://t.me/ramachanel";
     creditLink.target    = "_blank";
     document.body.appendChild(creditLink);
 
     // ── Buat Auth Box ─────────────────────────────────────────────────────────
     const authBox         = document.createElement("div");
-    authBox.id            = "rama-auth-box";
+    authBox.id            = "vanz-auth-box";
     authBox.style.cssText = CONFIG.s;
     authBox.innerHTML     = `
-      <button id="rama-music-btn" style="
+      <button id="vanz-music-btn" style="
         position:absolute;top:15px;right:15px;
         background:rgba(255,255,255,0.05);border:1px solid rgba(0,255,204,0.3);
         color:#ff4444;border-radius:50%;width:32px;height:32px;
@@ -152,13 +132,13 @@
 
       <h3 style="margin:0 0 6px 0;color:#00ffcc;font-size:20px;letter-spacing:1.5px;
                  font-weight:800;text-shadow:0 0 12px rgba(0,255,204,0.5);text-transform:uppercase;">
-        ${titleName} TEAM
+        ${titleName} PREMIUM
       </h3>
       <p style="margin:0 0 20px 0;color:#64748b;font-size:11px;letter-spacing:2px;font-weight:600;">
         ENTER LICENSE KEY
       </p>
 
-      <input type="text" id="rama-key-input" placeholder="ENTER KEY HERE" style="
+      <input type="text" id="vanz-key-input" placeholder="ENTER KEY HERE" style="
         width:100%;padding:12px;margin-bottom:16px;
         border:1px solid rgba(0,255,204,0.4);border-radius:8px;
         background:rgba(7,11,25,0.6);color:#fff;text-align:center;
@@ -166,35 +146,35 @@
         letter-spacing:1px;outline:none;transition:all 0.3s ease;
         box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);">
 
-      <button id="rama-login-btn" style="
+      <button id="vanz-login-btn" style="
         width:100%;background:#00ffcc;color:#030712;border:none;
         padding:12px;border-radius:8px;font-weight:700;cursor:pointer;
         font-size:14px;letter-spacing:0.5px;margin-bottom:12px;
         box-shadow:0 4px 12px rgba(0,255,204,0.3);transition:all 0.2s ease;">
-        VERIFY
+        VERIFY KEY
       </button>
 
-      <button id="rama-telegram-btn" style="
+      <button id="vanz-telegram-btn" style="
         width:100%;background:#229ED9;color:#fff;border:none;
         padding:12px;border-radius:8px;font-weight:700;cursor:pointer;
         font-size:14px;letter-spacing:0.5px;
         box-shadow:0 4px 12px rgba(34,158,217,0.25);">
-        TELEGRAM RAMA MODZ
+        TELEGRAM VANZXTP
       </button>
 
-      <div id="rama-status" style="margin-top:16px;font-size:11px;font-weight:700;
+      <div id="vanz-status" style="margin-top:16px;font-size:11px;font-weight:700;
                                    color:#64748b;letter-spacing:1.5px;">
-        RAMA MODZ TEAM
+        VANZXTP DEVELOPER
       </div>
     `;
     document.body.appendChild(authBox);
 
     // ── Referensi Elemen ──────────────────────────────────────────────────────
-    const musicBtn    = document.getElementById("rama-music-btn");
-    const keyInput    = document.getElementById("rama-key-input");
-    const loginBtn    = document.getElementById("rama-login-btn");
-    const telegramBtn = document.getElementById("rama-telegram-btn");
-    const statusEl    = document.getElementById("rama-status");
+    const musicBtn    = document.getElementById("vanz-music-btn");
+    const keyInput    = document.getElementById("vanz-key-input");
+    const loginBtn    = document.getElementById("vanz-login-btn");
+    const telegramBtn = document.getElementById("vanz-telegram-btn");
+    const statusEl    = document.getElementById("vanz-status");
 
     // ── Responsif Mobile ──────────────────────────────────────────────────────
     setTimeout(() => {
@@ -219,8 +199,6 @@
           const audioUrl = (await res.text()).trim();
           if (audioUrl && audioUrl.startsWith("http")) {
             resolvedUrl = audioUrl;
-          } else {
-            console.log("Invalid audio URL in music.txt, using fallback.");
           }
         } catch (err) {
           console.log("Failed to fetch music URL, using fallback:", err);
@@ -284,14 +262,14 @@
         <div style="text-align:center; background:rgba(6,10,23,0.95);
                     padding:35px 30px; border-radius:16px;
                     border:1px solid #00ffcc; width:290px;
-                    animation: rama-lightning-glow 3s linear infinite;">
+                    animation: vanz-lightning-glow 3s linear infinite;">
           <div style="width:45px; height:45px;
                       border:4px solid rgba(0,255,204,0.1);
                       border-top:4px solid #00ffcc; border-radius:50%;
                       margin:0 auto 20px auto;
-                      animation:rama-spin 0.8s linear infinite;
+                      animation:vanz-spin 0.8s linear infinite;
                       box-shadow:0 0 15px rgba(0,255,204,0.2);"></div>
-          <p id="rama-check-text" style="color:#00ffcc; font-size:15px;
+          <p id="vanz-check-text" style="color:#00ffcc; font-size:15px;
              font-weight:700; margin:0; letter-spacing:1.5px;
              text-shadow:0 0 8px rgba(0,255,204,0.3);">CHECKING UPDATE...</p>
         </div>
@@ -306,7 +284,7 @@
           if (updateText.includes("GitHub Updated")) hasUpdate = true;
         } catch { /* silent */ }
 
-        const checkText = document.getElementById("rama-check-text");
+        const checkText = document.getElementById("vanz-check-text");
         checkText.innerHTML = hasUpdate
           ? "<span style='color:#00ffcc;'>Link Updated Successfully! ✓</span>"
           : "<span style='color:#ff4444; text-shadow:0 0 8px rgba(255,68,68,0.3);'>No Update Available!</span>";
@@ -338,13 +316,13 @@
                               width:214px; height:214px; border-radius:50%;
                               background:conic-gradient(transparent 0deg,#ff3300 90deg,#ffaa00 180deg,#00ffcc 270deg,transparent 360deg);
                               filter:blur(14px); opacity:0.85;
-                              animation:rama-fire-spin 1.5s linear infinite; z-index:1;"></div>
+                              animation:vanz-fire-spin 1.5s linear infinite; z-index:1;"></div>
 
                   <div style="position:absolute; top:50%; left:50%;
                               width:206px; height:206px; border-radius:50%;
                               background:conic-gradient(transparent 0deg,#ff0055 60deg,#ff5500 120deg,#ffcc00 240deg,transparent 360deg);
                               filter:blur(6px); opacity:0.9;
-                              animation:rama-fire-spin 1s linear infinite reverse; z-index:2;"></div>
+                              animation:vanz-fire-spin 1s linear infinite reverse; z-index:2;"></div>
 
                   <svg width="240" height="240"
                        style="transform:rotate(-90deg); position:relative; z-index:3;">
@@ -413,7 +391,6 @@
         return;
       }
 
-      // Validasi key lokal (case-insensitive)
       const isValid = VALID_KEYS.some(k => k.toLowerCase() === inputKey.toLowerCase());
 
       if (isValid) {
@@ -425,19 +402,19 @@
           authBox.innerHTML = `
             <h3 style="margin:0 0 8px 0;color:#00ffcc;font-size:18px;letter-spacing:1px;
                        font-weight:800;text-shadow:0 0 12px rgba(0,255,204,0.5);">
-             RAMA MODZ TEAM MODE
+             VANZ VIP METHOD MODE
             </h3>
             <p style="margin:0 0 22px 0;color:#64748b;font-size:10px;letter-spacing:1.5px;font-weight:600;">
               CHOOSE SECURITY BYPASS METHOD
             </p>
 
-            <button id="rama-btn-fast"   class="rama-mode-btn rama-btn-fast">FAST MODE (BAN RISK)</button>
-            <button id="rama-btn-secure" class="rama-mode-btn rama-btn-secure">SECURE MODE (MIDDLE)</button>
-            <button id="rama-btn-safe"   class="rama-mode-btn rama-btn-safe">SAFE MODE (FULL SAFE)</button>
+            <button id="vanz-btn-fast"   class="vanz-mode-btn vanz-btn-fast">FAST MODE (BAN RISK)</button>
+            <button id="vanz-btn-secure" class="vanz-mode-btn vanz-btn-secure">SECURE MODE (MIDDLE)</button>
+            <button id="vanz-btn-safe"   class="vanz-mode-btn vanz-btn-safe">SAFE MODE (FULL SAFE)</button>
           `;
-          document.getElementById("rama-btn-fast").addEventListener("click",   () => runRedirect(30));
-          document.getElementById("rama-btn-secure").addEventListener("click", () => runRedirect(45));
-          document.getElementById("rama-btn-safe").addEventListener("click",   () => runRedirect(60));
+          document.getElementById("vanz-btn-fast").addEventListener("click",   () => runRedirect(30));
+          document.getElementById("vanz-btn-secure").addEventListener("click", () => runRedirect(45));
+          document.getElementById("vanz-btn-safe").addEventListener("click",   () => runRedirect(60));
         }, 800);
 
       } else {
